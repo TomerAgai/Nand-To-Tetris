@@ -1,0 +1,75 @@
+/** Initializes a new TicTacToe game 
+will run the first game 
+stops when the user decides. */
+class Main {
+    static char key;   
+    static boolean firstGame;
+    static Board board;
+    function void main() {
+        let firstGame = true;
+        while(true){
+            do Screen.clearScreen();
+            do Main.run();
+            //checks if the user wants to play another one
+            do Output.println();
+            do Output.printString("press space to stop playing");
+            do Output.println();
+            do Output.printString("press 1 for the rules");
+            do Output.println();
+            do Output.printString("press anything else to continue!"); 
+            do Output.println();
+            do Sys.wait(2000);
+            let key = Keyboard.readChar();    
+            // if a user decides to stop playing        
+            if(key = 32){
+                return;
+            }
+            // if a user chose to view the rules again 
+            if(key = 49){
+                let firstGame = true;
+            }
+        }
+        return;
+    }
+    /** initialize the Game and activate GameTic class functions */
+    function void run(){
+        var boolean start;
+        while(true){
+            let start = false;
+            do Output.moveCursor(0,0);
+            if(firstGame){//go to rules view 
+                do Main.init();
+                let firstGame = false;
+            }else{//main view before the game starts
+                do Output.printString("welcome to TicTacToe!");
+                do Output.println();
+                do Output.printString("Please press 0 to proceed");
+            }
+            while(~start){
+                let key = Keyboard.keyPressed();
+                if(key = 48){
+                    let start =true;
+                }
+            }
+            //run the game itself
+            do Screen.clearScreen();
+            do Output.moveCursor(4,0);
+            do Output.printString("Enter a number between 1-9");
+            do GameTic.init();
+            do GameTic.play();
+            do GameTic.dispose();
+            return;
+        }
+    }
+    /** initialize the Screen to rules view */
+    function void init(){
+        do Output.printString("welcome to TicTacToe!");
+        do Output.println();
+        do Output.printString("Rules: press a number between 1-9 to choose a place");
+        do Output.println();
+        do Output.printString("press 0 to start the game!");
+        let board = Board.new(100, 150, 120);
+        do board.drawNumbers();
+        return;
+    }
+}

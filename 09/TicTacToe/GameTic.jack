@@ -1,0 +1,133 @@
+/** Initializes a board
+this class is meant for filling the board 
+and flow of the game. */
+class GameTic {
+    static Board board;
+    static boolean circle;// for drawing a circle and a cross one at a time
+    static Array moves;// for recalling which moves where made
+    static char key;
+
+ /** Initialize the board and an Array for the locations of signs */
+  function void init(){
+      var int i;
+      let board = Board.new(100, 150, 120);
+      let circle = false;
+      let moves = Array.new(9);
+      let i = 9;
+      while(i > 0){
+          let moves[i-1] = 0;
+          let i = i - 1; 
+      }
+      return;
+  }
+ /** Disposes the board and the array */
+  function void dispose(){
+      do Memory.deAlloc(moves);
+      do board.dispose();
+      return;
+  }
+ /** function that runs the game until there is a winner or a draw */
+  function void play(){
+      var boolean end;
+      let end = false;
+      while(~end){
+          let key = Keyboard.keyPressed();
+          if((key > 48) & (key < 58)) {
+            if((moves[key-49] = 0)){ // check that the place hasn't been drawn already
+                do GameTic.move(key);
+                let end = GameTic.checkWinOrDraw();
+            }
+        }
+      }
+      return;
+  }
+ /** fill the required location on the board*/
+  function void move(char key){
+      
+      var String result;
+      var int row, col;
+        // in the board, calculates the location's draw by a matrix representation
+        if(key = 49){let col = 0; let row = 0;}
+        if(key = 50){let col = 1; let row = 0;}
+        if(key = 51){let col = 2; let row = 0;}
+        if(key = 52){let col = 0; let row = 1;}
+        if(key = 53){let col = 1; let row = 1;}
+        if(key = 54){let col = 2; let row = 1;}
+        if(key = 55){let col = 0; let row = 2;}
+        if(key = 56){let col = 1; let row = 2;}
+        if(key = 57){let col = 2; let row = 2;}
+        
+        //check which sign to draw 
+        if(circle){ // draw circle
+            do board.drawCircle(row, col);
+            let moves[key-49] = 1;
+            let circle = false;
+        }
+        else{ // draw cross
+            do board.drawCross(row, col);
+            let moves[key-49] = 2;
+            let circle = true;
+        }   
+        return;     
+
+  }
+ /** checks if the game has ended */
+  function boolean checkWinOrDraw(){
+      var int i, count, j;
+      let i = 0;
+      do Output.moveCursor(0,0);
+      while(i < 3){
+        // vertical win 
+        if((~(moves[i] = 0)) & (moves[i] = moves[i+3]) & (moves[i] = moves[i+6])){
+            do GameTic.win();
+            return true;
+        }
+        // horizontal win 
+        if((~(moves[i*3] = 0)) & (moves[i*3] = moves[(i*3)+1]) & (moves[i*3] = moves[(i*3)+2])){
+            do GameTic.win();
+            return true;
+        }
+        
+          let i = i + 1;
+      }
+      // main diagonal win 
+      if((~(moves[0] = 0)) & (moves[0] = moves[4]) & (moves[0] = moves[8])){
+          do GameTic.win();
+          return true;
+      }
+      // secondary diagonal win 
+      if((~(moves[2] = 0)) & (moves[2] = moves[4]) & (moves[2] = moves[6])){
+          do GameTic.win();
+          return true;
+      }
+      // check for a draw
+      let count = 0;
+      let j = 0;
+      while(j < 9){
+          if(~(moves[j] = 0)){
+              let count = count + 1;
+          }
+          let j = j + 1;
+      }
+      if(count = 9){// a draw
+          do Output.printString("Game over with a draw!");
+          do Output.println();
+          return true;
+      }
+      return false;
+
+  }
+   /** decides who won the game and prints result */
+  function void win(){
+      if(circle){
+          do Output.printString("Game over, Cross wins!");
+      }
+      else{
+          do Output.printString("Game over, Circle wins!");
+      }
+      do Output.println();
+
+      return;
+  }
+   
+}

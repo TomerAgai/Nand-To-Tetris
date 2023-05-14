@@ -1,0 +1,88 @@
+/** Implements a graphical board. */
+class Board {
+   // screen location of the board's top-left corner and size of the board
+   field int px, py, size; 
+   static int memAddress;
+   /** Constructs a new Board */
+   constructor Board new(int x, int y, int magnitude) {
+       let px = x;
+       let py = y;
+       let size = magnitude;
+
+       do draw();
+       return this;
+   }
+
+   /** Disposes this Board. */
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   /** Draws the board on the screen. */
+   method void draw() {
+      var int thick;
+      do Screen.setColor(true);
+      let thick = 4;
+      while (thick > 0){
+        // horizontal lines
+        do Screen.drawLine(px, py + thick, px+size, py + thick);
+        do Screen.drawLine(px, py-(size/3) + thick, px+size, py-(size/3) + thick);
+        // vertical lines
+        do Screen.drawLine(px + (size/3) + thick, py + (size/3), px + (size/3) + thick, py - (size/3 * 2));
+        do Screen.drawLine(px + (size/3 *2) + thick, py + (size/3), px + (size/3 *2) + thick, py - (size/3 * 2));
+        let thick = thick - 1;
+      }
+      return;
+   }
+
+
+    /** Draws the circle on the screen. */
+   method void drawCircle(int row, int col){
+       do Screen.setColor(true);
+       do Screen.drawCircle(px + (size/6) + (size/3*col), py - (size/2) + (size/3*row), size/12);
+       return;
+   } 
+
+
+    /** Draws the cross on the screen. */
+   method void drawCross(int row, int col){
+       var int x1, x2, y1, y2, temp;
+       do Screen.setColor(true);
+       let x1 = px + (size/12) + (size/3*col);
+       let y1 = py - (size/12) + (size/3*row) - (size/3);
+       let x2 = x1 + (size/6);
+       let y2 = y1 - (size/6);
+       do Screen.drawLine(x1, y1, x2, y2);
+       let temp = y1;
+       let y1 = y2;
+       let y2 = temp;
+       do Screen.drawLine(x1, y1, x2, y2);
+       return;
+   }
+/** Draws initial numbers for the user on the screen (rules). */
+  method void drawNumbers(){
+    do Output.moveCursor(8,15);
+      do Output.printInt(1);
+      do Output.moveCursor(8,20);
+      do Output.printInt(2);
+      do Output.moveCursor(8,25);
+      do Output.printInt(3);
+      do Output.moveCursor(12,15);
+      do Output.printInt(4);
+      do Output.moveCursor(12,20);
+      do Output.printInt(5);
+      do Output.moveCursor(12,25);
+      do Output.printInt(6);
+      do Output.moveCursor(16,15);
+      do Output.printInt(7);
+      do Output.moveCursor(16,20);
+      do Output.printInt(8);
+      do Output.moveCursor(16,25);
+      do Output.printInt(9);
+      return;
+
+  }
+   
+
+}
